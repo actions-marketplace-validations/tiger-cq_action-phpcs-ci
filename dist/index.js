@@ -8809,9 +8809,12 @@ async function getChangedFiles() {
             windowsHide: true,
             timeout: 5000,
         });
+	    
+	    console.log('Git stdout', git, git.stdout);
         const readline = readline_1.createInterface({
             input: git.stdout,
         });
+	   
         const result = {
             added: [],
             modified: [],
