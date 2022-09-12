@@ -1,4 +1,4 @@
-name: 'action-phpcs'
+name: 'action-phpcs-ci'
 description: 'Runs PHP_CodeSniffer on files changed in current PR or even only on lines by author of PR'
 author: 'Konstantin Vyatkin <tino@vtkn.io>'
 inputs:
