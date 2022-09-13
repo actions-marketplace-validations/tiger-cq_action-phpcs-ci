@@ -8820,6 +8820,7 @@ async function getChangedFiles() {
         };
 
         // for test
+        console.log('DIR curr', __dirname);
         const fileStream = fs_1.createReadStream('test.json');
 
         const rl = readline.createInterface({
