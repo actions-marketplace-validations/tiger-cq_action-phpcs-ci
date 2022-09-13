@@ -8801,7 +8801,6 @@ async function getChangedFiles() {
         });
 
         for await (const line of readline) {
-            console.log(line);
             result.added.push(line);
             result.modified.push(line);
         }
