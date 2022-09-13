@@ -8794,7 +8794,8 @@ async function getChangedFiles() {
             modified: [],
         };
 
-        const fileStream = fs_1.createReadStream('/tmp/gitBlame.txt');
+        const blameFilePath = '/tmp/gitBlame.txt';
+        const fileStream = fs_1.createReadStream(blameFilePath);
 
         const readline = readline_1.createInterface({
             input: fileStream,
@@ -8805,9 +8806,15 @@ async function getChangedFiles() {
             result.modified.push(line);
         }
 
+        fs_1.unlink(blameFilePath, (err) => {
+            if (err) {
+                console.error(err);
+                return result;
+            }
+        });
+
         return result;
-    }
-    catch (err) {
+    } catch (err) {
         console.error(err);
         return {
             added: [],
