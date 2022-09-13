@@ -2137,7 +2137,6 @@ async function runOnBlame(files) {
         //   .payload as Webhooks.EventPayloads.WebhookPayloadPullRequest;
         // get email of author of first commit in PR
         const authorEmail = child_process_1.execFileSync('git', ['--no-pager', 'log', '--format=%ae', `${github.context.sha}^!`], { encoding: 'utf8', windowsHide: true, timeout: 5000 }).trim();
-        console.log('PR author email: %s', authorEmail);
         for (const [file, results] of Object.entries(lintResults.files)) {
             const blameMap = await git_blame_json_1.blame(file);
             let headerPrinted = false;
@@ -8790,10 +8789,6 @@ async function getChangedFiles() {
     const globs = pattern.length ? pattern.split(',') : ['**.php'];
     const isMatch = picomatch_1.default(globs);
     console.log('Filter patterns:', globs, isMatch('src/test.php'));
-    /*
-      getting them from Git
-      git diff-tree --no-commit-id --name-status --diff-filter=d -r ${{ github.event.pull_request.base.sha }}..${{ github.event.after }}
-    */
     try {
         const result = {
             added: [],
@@ -8808,6 +8803,7 @@ async function getChangedFiles() {
         });
 
         for await (const line of readline) {
+            console.log(line);
             result.added.push(line);
             result.modified.push(line);
         }
