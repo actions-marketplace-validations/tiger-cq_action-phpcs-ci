@@ -2137,7 +2137,6 @@ async function runOnBlame(files) {
         //   .payload as Webhooks.EventPayloads.WebhookPayloadPullRequest;
         // get email of author of first commit in PR
         const authorEmail = child_process_1.execFileSync('git', ['--no-pager', 'log', '--format=%ae', `${github.context.sha}^!`], { encoding: 'utf8', windowsHide: true, timeout: 5000 }).trim();
-        console.log('PR author email: %s', authorEmail);
         for (const [file, results] of Object.entries(lintResults.files)) {
             const blameMap = await git_blame_json_1.blame(file);
             let headerPrinted = false;
@@ -8790,70 +8789,26 @@ async function getChangedFiles() {
     const globs = pattern.length ? pattern.split(',') : ['**.php'];
     const isMatch = picomatch_1.default(globs);
     console.log('Filter patterns:', globs, isMatch('src/test.php'));
-    const payload = github.context;
-    /*
-      getting them from Git
-      git diff-tree --no-commit-id --name-status --diff-filter=d -r ${{ github.event.pull_request.base.sha }}..${{ github.event.after }}
-    */
     try {
-        const git = child_process_1.spawn('git', [
-            '--no-pager',
-            'diff-tree',
-            '--no-commit-id',
-            '--name-status',
-            '--diff-filter=d',
-            '-r',
-            `${payload.sha}..`,
-        ], {
-            windowsHide: true,
-            timeout: 5000,
-        });
-	    
-        const readline = readline_1.createInterface({
-            input: git.stdout,
-        });
-
-	   
         const result = {
-            added: ['api_v3/modules/organization_users_v2.php'],
-            modified: ['api_v3/modules/organization_users_v2.php'],
+            added: [],
+            modified: [],
         };
 
         // for test
         const fileStream = fs_1.createReadStream('/tmp/test.txt');
 
-        const rl = readline_1.createInterface({
+        const readline = readline_1.createInterface({
             input: fileStream,
         });
-        // Note: we use the crlfDelay option to recognize all instances of CR LF
-        // ('\r\n') in input.txt as a single line break.
 
-        for await (const line of rl) {
-            // Each line in input.txt will be successively available here as `line`.
-            console.log(`TESTING debug: Line from file: ${line}`);
+        for await (const line of readline) {
+            console.log(line);
+            result.added.push(line);
+            result.modified.push(line);
         }
         // end for test
 
-        console.log('readline', readline);
-        for await (const line of readline) {
-            console.log('test line', line);
-            const parsed = /^(?<status>[ACMR])[\s\t]+(?<file>\S+)$/.exec(line);
-            if (parsed === null || parsed === void 0 ? void 0 : parsed.groups) {
-                const { status, file } = parsed.groups;
-                // ensure file exists
-                if (isMatch(file) && fs_1.existsSync(file)) {
-                    switch (status) {
-                        case 'A':
-                        case 'C':
-                        case 'R':
-                            result.added.push(file);
-                            break;
-                        case 'M':
-                            result.modified.push(file);
-                    }
-                }
-            }
-        }
         return result;
     }
     catch (err) {
