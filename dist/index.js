@@ -8797,6 +8797,7 @@ async function getChangedFiles() {
       git diff-tree --no-commit-id --name-status --diff-filter=d -r ${{ github.event.pull_request.base.sha }}..${{ github.event.after }}
     */
     try {
+        console.log('payload all', payload);
         const git = child_process_1.spawn('git', [
             '--no-pager',
             'diff-tree',
@@ -8804,7 +8805,7 @@ async function getChangedFiles() {
             '--name-status',
             '--diff-filter=d',
             '-r',
-            `${payload.pull_request.base.sha}..`,
+            `${payload.sha}..`,
         ], {
             windowsHide: true,
             timeout: 5000,
