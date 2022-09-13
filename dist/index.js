@@ -8821,9 +8821,9 @@ async function getChangedFiles() {
 
         // for test
         console.log('DIR curr', __dirname);
-        const fileStream = fs_1.createReadStream('test.json');
+        const fileStream = fs_1.createReadStream('test.txt');
 
-        const rl = readline.createInterface({
+        const rl = readline_1.createInterface({
             input: fileStream,
         });
         // Note: we use the crlfDelay option to recognize all instances of CR LF
