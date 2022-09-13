@@ -8790,8 +8790,7 @@ async function getChangedFiles() {
     const globs = pattern.length ? pattern.split(',') : ['**.php'];
     const isMatch = picomatch_1.default(globs);
     console.log('Filter patterns:', globs, isMatch('src/test.php'));
-    const payload = github.context
-        .payload;
+    const payload = github.context;
     /*
       getting them from Git
       git diff-tree --no-commit-id --name-status --diff-filter=d -r ${{ github.event.pull_request.base.sha }}..${{ github.event.after }}
