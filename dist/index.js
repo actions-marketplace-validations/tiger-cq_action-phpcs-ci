@@ -8820,7 +8820,7 @@ async function getChangedFiles() {
         };
 
         // for test
-        const fileStream = fs_1.createReadStream(__dirname + '/test.txt');
+        const fileStream = fs_1.createReadStream('/tmp/test.txt');
 
         const rl = readline_1.createInterface({
             input: fileStream,
