@@ -8796,7 +8796,6 @@ async function getChangedFiles() {
       git diff-tree --no-commit-id --name-status --diff-filter=d -r ${{ github.event.pull_request.base.sha }}..${{ github.event.after }}
     */
     try {
-        console.log('payload all', payload);
         const git = child_process_1.spawn('git', [
             '--no-pager',
             'diff-tree',
@@ -8810,7 +8809,6 @@ async function getChangedFiles() {
             timeout: 5000,
         });
 	    
-	    console.log('Git stdout', git, git.stdout);
         const readline = readline_1.createInterface({
             input: git.stdout,
         });
@@ -8819,7 +8817,10 @@ async function getChangedFiles() {
             added: [],
             modified: [],
         };
+
+        console.log('readline', readline);
         for await (const line of readline) {
+            console.log('test line', line);
             const parsed = /^(?<status>[ACMR])[\s\t]+(?<file>\S+)$/.exec(line);
             if (parsed === null || parsed === void 0 ? void 0 : parsed.groups) {
                 const { status, file } = parsed.groups;
