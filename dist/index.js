@@ -8806,8 +8806,6 @@ async function getChangedFiles() {
             result.modified.push(line);
         }
 
-        console.log(result);
-
         fs_1.unlink(blameFilePath, (err) => {
             if (err) {
                 console.error(err);
